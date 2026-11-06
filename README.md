@@ -11,3 +11,4 @@ Painel de controlo e monitorização em tempo real das operações de Black Frid
 ## 🌐 Acesso ao Dashboard:
 Hosted gratuitamente via GitHub Pages:
 👉 [https://scarqueijo.github.io/black-friday-2026-dashboard/](https://scarqueijo.github.io/black-friday-2026-dashboard/)
+

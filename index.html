@@ -64,9 +64,9 @@
       <div class="flex items-center space-x-4">
         <div class="hidden sm:flex items-center space-x-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500 badge-pulse"></span>
-          <span>Sistemas Operacionais 100%</span>
+          <span>VPS Oracle 24/7 Ativa</span>
         </div>
-        <button onclick="refreshData()" class="p-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg transition" title="Recarregar">
+        <button onclick="fetchLiveMetrics()" class="p-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg transition" title="Recarregar Dados em Tempo Real">
           <i data-lucide="refresh-cw" class="w-4 h-4" id="refreshIcon"></i>
         </button>
       </div>
@@ -102,7 +102,7 @@
       </div>
     </div>
 
-    <!-- 4 MAIN KPI CARDS -->
+    <!-- 4 MAIN KPI CARDS (DADOS REAIS EM TEMPO REAL) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       
       <!-- Card 1: Nexora Shopify -->
@@ -113,7 +113,7 @@
             <i data-lucide="shopping-bag" class="w-4 h-4"></i>
           </div>
         </div>
-        <div class="text-2xl font-black text-slate-900 tracking-tight">50+ Produtos</div>
+        <div class="text-2xl font-black text-slate-900 tracking-tight" id="valShopifyProducts">149 Produtos</div>
         <div class="flex items-center gap-1.5 mt-2 text-xs font-medium text-emerald-600">
           <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
           <span>Shopify API Conectada</span>
@@ -132,10 +132,13 @@
             <i data-lucide="message-square" class="w-4 h-4"></i>
           </div>
         </div>
-        <div class="text-2xl font-black text-slate-900 tracking-tight">Ativo 24/7</div>
+        <div class="text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-2">
+          <span id="valDiscordMembers">6 Membros</span>
+          <span class="text-xs font-semibold text-emerald-600" id="valDiscordOnline">(4 Online)</span>
+        </div>
         <div class="flex items-center gap-1.5 mt-2 text-xs font-medium text-indigo-600">
           <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-          <span>Guild ID: 1566025491...</span>
+          <span id="valDiscordName">DescontosPT.pt</span>
         </div>
         <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
           <span>Bot PM2: <strong class="text-slate-800">discord-bot</strong></span>
@@ -151,10 +154,10 @@
             <i data-lucide="mail" class="w-4 h-4"></i>
           </div>
         </div>
-        <div class="text-2xl font-black text-slate-900 tracking-tight">Brevo API</div>
+        <div class="text-2xl font-black text-slate-900 tracking-tight" id="valBrevoSubs">Brevo API Ativa</div>
         <div class="flex items-center gap-1.5 mt-2 text-xs font-medium text-blue-600">
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
-          <span>Captura de Leads Ativa</span>
+          <span>2 Listas Sincronizadas</span>
         </div>
         <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
           <span>Newsletter Semanal</span>
@@ -170,7 +173,7 @@
             <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
           </div>
         </div>
-        <div class="text-2xl font-black text-slate-900 tracking-tight">200 Deals</div>
+        <div class="text-2xl font-black text-slate-900 tracking-tight" id="valDealsCount">200 Deals</div>
         <div class="flex items-center gap-1.5 mt-2 text-xs font-medium text-amber-600">
           <i data-lucide="award" class="w-3.5 h-3.5"></i>
           <span>Google AdSense Pronto</span>
@@ -265,19 +268,19 @@
           <div class="space-y-2.5 text-xs">
             <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
               <span class="text-slate-600 font-medium flex items-center gap-1.5"><i data-lucide="terminal" class="w-3.5 h-3.5 text-slate-400"></i> dealflow</span>
-              <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">online</span>
+              <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded" id="stDealflow">online</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
               <span class="text-slate-600 font-medium flex items-center gap-1.5"><i data-lucide="message-circle" class="w-3.5 h-3.5 text-slate-400"></i> wa-daemon</span>
-              <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">online (:3005)</span>
+              <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded" id="stWa">online (:3005)</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
               <span class="text-slate-600 font-medium flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5 text-slate-400"></i> smc-pro</span>
-              <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">HTTP 200 OK</span>
+              <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded" id="stSmc">HTTP 200 OK</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
               <span class="text-slate-600 font-medium flex items-center gap-1.5"><i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-slate-400"></i> nexora-bot</span>
-              <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">online (Vendas)</span>
+              <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded" id="stNexora">online (Vendas)</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
               <span class="text-slate-600 font-medium flex items-center gap-1.5"><i data-lucide="trending-up" class="w-3.5 h-3.5 text-slate-400"></i> crypto & stocks</span>
@@ -287,7 +290,7 @@
         </div>
 
         <div class="mt-4 pt-3 border-t border-slate-100 text-center">
-          <span class="text-[11px] text-slate-400 font-medium">Recursos: 15GB Livres • 11GB RAM Disponíveis</span>
+          <span class="text-[11px] text-slate-400 font-medium" id="valVpsResources">Recursos: 15GB Livres • 12GB RAM Disponíveis</span>
         </div>
       </div>
 
@@ -403,25 +406,51 @@
       <div class="flex items-center space-x-4">
         <span>Última Sincronização: <strong id="lastSyncTime" class="text-slate-700">Em Direto</strong></span>
         <span>•</span>
-        <span class="text-emerald-600 font-bold">Atualização a cada 5 min</span>
+        <span class="text-emerald-600 font-bold">Atualização Automática VPS (5 min)</span>
       </div>
     </div>
   </footer>
 
   <script>
     lucide.createIcons();
-    
-    function refreshData() {
+
+    async function fetchLiveMetrics() {
       const icon = document.getElementById('refreshIcon');
-      icon.classList.add('animate-spin');
-      setTimeout(() => {
-        document.getElementById('lastSyncTime').innerText = new Date().toLocaleTimeString('pt-PT');
-        icon.classList.remove('animate-spin');
-      }, 700);
+      if (icon) icon.classList.add('animate-spin');
+
+      try {
+        const res = await fetch('https://descontospt.pt/dashboard_data.json?t=' + Date.now());
+        if (res.ok) {
+          const d = await res.json();
+          if (d.discord) {
+            document.getElementById('valDiscordMembers').innerText = `${d.discord.members} Membros`;
+            document.getElementById('valDiscordOnline').innerText = `(${d.discord.online} Online)`;
+            if (d.discord.name) document.getElementById('valDiscordName').innerText = d.discord.name;
+          }
+          if (d.shopify && d.shopify.products_count) {
+            document.getElementById('valShopifyProducts').innerText = `${d.shopify.products_count} Produtos`;
+          }
+          if (d.traffic && d.traffic.deals_count) {
+            document.getElementById('valDealsCount').innerText = `${d.traffic.deals_count} Deals`;
+          }
+          if (d.vps && d.vps.disk_free && d.vps.mem_free) {
+            document.getElementById('valVpsResources').innerText = `Recursos: ${d.vps.disk_free} Livres • ${d.vps.mem_free} RAM Disponíveis`;
+          }
+          if (d.updated_at_pt) {
+            document.getElementById('lastSyncTime').innerText = d.updated_at_pt;
+          }
+        }
+      } catch (e) {
+        console.log('[Dashboard] A usar métricas em cache:', e.message);
+      } finally {
+        if (icon) setTimeout(() => icon.classList.remove('animate-spin'), 600);
+      }
     }
-    
-    document.getElementById('lastSyncTime').innerText = new Date().toLocaleTimeString('pt-PT');
-    setInterval(refreshData, 300000); // 5 min auto-refresh
+
+    // Carregar dados reais ao abrir a página
+    fetchLiveMetrics();
+    // Auto-refresh a cada 5 minutos
+    setInterval(fetchLiveMetrics, 300000);
   </script>
 </body>
 </html>
