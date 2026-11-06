@@ -419,7 +419,10 @@
       if (icon) icon.classList.add('animate-spin');
 
       try {
-        const res = await fetch('https://descontospt.pt/dashboard_data.json?t=' + Date.now());
+        let res = await fetch('https://descontospt.pt/dashboard_data.json?t=' + Date.now());
+        if (!res.ok) {
+          res = await fetch('https://raw.githubusercontent.com/descontos-pt/descontos-pt.github.io/main/dashboard_data.json?t=' + Date.now());
+        }
         if (res.ok) {
           const d = await res.json();
           if (d.discord) {
